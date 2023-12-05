@@ -22,7 +22,7 @@ def parse_game(game)
   max_red * max_blue * max_green
 end
 
-def part1(input)
+def part2(input)
   result = 0
   input.split("\n") do |line|
     game = line.match(/Game \d+: (.*)/).captures.first
@@ -35,5 +35,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   input = File.read('input.txt')
-  p part1(input)
+  p part2(input)
 end
