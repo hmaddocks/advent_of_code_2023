@@ -1,4 +1,4 @@
-defmodule Day1 do
+defmodule Part1 do
   def find_digit({head, tail}) do
     case Integer.parse(head) do
       {num, _} -> num
@@ -18,7 +18,7 @@ defmodule Day1 do
 
     last =
       line
-      |> String.reverse(line)
+      |> String.reverse()
       |> String.next_grapheme()
       |> find_digit()
 
@@ -34,5 +34,5 @@ defmodule Day1 do
 end
 
 File.read!(~c"input.txt")
-|> Day1.part1()
+|> Part1.part1()
 |> IO.inspect(label: "part1")
