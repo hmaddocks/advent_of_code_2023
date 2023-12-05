@@ -1,17 +1,14 @@
-fn find_first_digit(input: &str) -> Option<u32> {
+fn find_digit(input: &str) -> Option<u32> {
     input.chars().filter_map(|c| c.to_digit(10)).next()
 }
 
-fn find_last_digit(input: &str) -> Option<u32> {
-    input.chars().rev().filter_map(|c| c.to_digit(10)).next()
-}
-
 fn process_line(line: &str) -> u32 {
-    let first = match find_first_digit(line) {
+    let first = match find_digit(line) {
         Some(digit) => digit,
         None => 0,
     };
-    let last = match find_last_digit(line) {
+    let reversed_line = line.chars().rev().collect::<String>();
+    let last = match find_digit(&reversed_line) {
         Some(digit) => digit,
         None => 0,
     };
@@ -34,17 +31,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_find_first_digit() {
-        assert_eq!(find_first_digit("abc123"), Some(1));
-        assert_eq!(find_first_digit("789xyz"), Some(7));
-        assert_eq!(find_first_digit("no_digits_here"), None);
-    }
-
-    #[test]
-    fn test_find_last_digit() {
-        assert_eq!(find_last_digit("abc123"), Some(3));
-        assert_eq!(find_last_digit("789xyx"), Some(9));
-        assert_eq!(find_last_digit("no_digits_here"), None);
+    fn test_find_digit() {
+        assert_eq!(find_digit("abc123"), Some(1));
+        assert_eq!(find_digit("789xyz"), Some(7));
     }
 
     #[test]
