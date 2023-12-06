@@ -2,7 +2,7 @@
 
 require_relative 'part2'
 
-describe '#part1' do
+describe '#part2' do
   it 'returns the sum of game ids when there are multiple games and some have fewer colors than the bag' do
     input = <<~INPUT
       Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
@@ -12,7 +12,7 @@ describe '#part1' do
       Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
     INPUT
 
-    expect(part1(input)).to eq(2286)
+    expect(part2(input)).to eq(2286)
   end
 end
 
@@ -23,22 +23,23 @@ describe '#parse_game' do
   end
 
   it 'returns the correct product when there is one turn' do
-    game = [{red: 3, blue: 4, green: 5}]
+    game = [{ red: 3, blue: 4, green: 5 }]
     expect(parse_game(game)).to eq(60)
   end
 
   it 'returns the correct product when there are multiple turns' do
-    game = [{red: 3, blue: 4, green: 5}, {red: 1, blue: 2, green: 6}]
+    game = [{ red: 3, blue: 4, green: 5 },
+            { red: 1, blue: 2, green: 6 }]
     expect(parse_game(game)).to eq(72)
   end
 
   it 'returns the correct product when there are multiple turns with different colors' do
-    game = [{red: 3, blue: 4}, {red: 1, green: 6}]
+    game = [{ red: 3, blue: 4 }, { red: 1, green: 6 }]
     expect(parse_game(game)).to eq(72)
   end
 
   it 'returns the correct product when there are multiple turns with missing colors' do
-    game = [{red: 3, blue: 4}, {green: 6}]
+    game = [{ red: 3, blue: 4 }, { green: 6 }]
     expect(parse_game(game)).to eq(72)
   end
 end
