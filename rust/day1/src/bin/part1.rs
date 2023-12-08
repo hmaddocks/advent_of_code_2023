@@ -3,15 +3,9 @@ fn find_digit(input: &str) -> Option<u32> {
 }
 
 fn process_line(line: &str) -> u32 {
-    let first = match find_digit(line) {
-        Some(digit) => digit,
-        None => 0,
-    };
+    let first = find_digit(line).unwrap_or(0);
     let reversed_line = line.chars().rev().collect::<String>();
-    let last = match find_digit(&reversed_line) {
-        Some(digit) => digit,
-        None => 0,
-    };
+    let last = find_digit(&reversed_line).unwrap_or(0);
 
     first * 10 + last
 }
@@ -39,7 +33,7 @@ mod tests {
     #[test]
     fn test_process_line() {
         assert_eq!(process_line("abc123"), 13);
-        assert_eq!(process_line("xyz789"), 79);
+        assert_eq!(process_line("7x8y9xyz"), 79);
     }
 
     #[test]
