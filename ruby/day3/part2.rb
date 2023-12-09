@@ -26,28 +26,28 @@ def find_numbers(input)
   list
 end
 
-def adjacent?(symbol_pos, number, width, positions)
+def adjacent?(symbol_pos, number, width)
   return false if symbol_pos < number[1] - (width + 1) || symbol_pos > (number[2] + width + 1)
 
-  positions.any? do |position|
-    (symbol_pos + position) >= number[1] && (symbol_pos + position) <= number[2]
+  [-(width + 1), -width, -(width - 1), -1, 1, width - 1, width, width + 1].any? do |position|
+    pos = symbol_pos + position
+    pos >= number[1] && pos <= number[2]
   end
 end
 
-def part1(input)
+def part2(input)
   width = input.split("\n").first.length
   input = input.delete("\n")
 
-  positions = [-(width + 1), -width, -(width - 1), -1, 1, width - 1, width, width + 1]
   stars = find_stars(input)
   numbers = find_numbers(input)
 
-  stars.map { |star| numbers.select { |number| adjacent?(star, number, width, positions) } }
+  stars.map { |star| numbers.select { |number| adjacent?(star, number, width) } }
        .select { |neighbours| neighbours.length == 2 }
-       .reduce(0) { |sum, neighbours| sum + (neighbours[0].first.to_i * neighbours[1].first.to_i) }
+       .sum { |(left, right)| left.first.to_i * right.first.to_i }
 end
 
 if __FILE__ == $PROGRAM_NAME
   input = File.read('input.txt')
-  p part1(input)
+  p part2(input)
 end
