@@ -53,7 +53,8 @@ fn part1(input: &str) -> u32 {
 
 fn main() {
     let input = std::fs::read_to_string("input.txt").unwrap();
-    println!("{}", part1(&input));
+    let output = part1(&input);
+    dbg!(output);
 }
 
 #[cfg(test)]
