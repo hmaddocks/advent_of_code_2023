@@ -26,7 +26,7 @@ fn adjacent(symbol_pos: i32, number: (&str, i32, i32), width: i32) -> bool {
         return false;
     }
 
-    let positions: Vec<i32> = vec![
+    vec![
         -(width + 1),
         -width,
         -(width - 1),
@@ -35,9 +35,9 @@ fn adjacent(symbol_pos: i32, number: (&str, i32, i32), width: i32) -> bool {
         (width - 1),
         width,
         (width + 1),
-    ];
-
-    positions.iter().any(|pos| {
+    ]
+    .iter()
+    .any(|pos| {
         let pos = symbol_pos + pos;
         pos >= number.1 && pos <= number.2
     })
@@ -47,10 +47,8 @@ fn part1(input: &str) -> i32 {
     let width = input.lines().next().unwrap().len() as i32;
     let new_input = input.replace("\n", "");
 
-    let symbols: Vec<i32> = find_symbols(&new_input);
-    dbg!(&symbols);
+    let symbols = find_symbols(&new_input);
     let numbers = find_numbers(&new_input);
-    dbg!(&numbers);
 
     symbols
         .iter()
@@ -64,7 +62,6 @@ fn part1(input: &str) -> i32 {
                 }
             })
         })
-        // .collect()
         .sum()
 }
 
@@ -144,6 +141,5 @@ mod tests {
 .664.598..";
 
         assert_eq!(part1(input), 4361);
-        // assert_eq!(part1(input), vec![1, 2, 3])
     }
 }
