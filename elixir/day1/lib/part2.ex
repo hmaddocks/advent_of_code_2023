@@ -45,15 +45,14 @@ defmodule Part2 do
   def part2(input) do
     input
     |> String.split("\n", trim: true)
-    |> Enum.map(fn line ->
-      line
-      |> find_numbers_or_digits
-      |> Enum.map(&number/1)
+    |> Enum.reduce(0, fn line, acc ->
+      numbers =
+        line
+        |> find_numbers_or_digits()
+        |> Enum.map(&number/1)
+
+      acc + Enum.at(numbers, 0) * 10 + Enum.at(numbers, -1)
     end)
-    |> Enum.map(fn numbers ->
-      Enum.at(numbers, 0) * 10 + Enum.at(numbers, -1)
-    end)
-    |> Enum.sum()
   end
 end
 
