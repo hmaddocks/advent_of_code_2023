@@ -36,15 +36,17 @@ fn parse_game(game: &[HashMap<&str, u32>]) -> bool {
 
 fn part1(input: &str) -> u32 {
     let mut result = 0;
+    let re = Regex::new(r"Game (\d+): (.*)").unwrap();
+
     for line in input.lines() {
-        let re = Regex::new(r"Game (\d+): (.*)").unwrap();
+        if let Some(captures) = re.captures(line) {
+            let game_id: u32 = captures[1].parse().unwrap();
+            let game = captures[2].to_string();
+            let turns = parse_line(&game);
 
-        let game_id: u32 = re.captures(line).unwrap()[1].parse().unwrap();
-        let game = re.captures(line).unwrap()[2].to_string();
-        let turns = parse_line(&game);
-
-        if parse_game(&turns) {
-            result += game_id;
+            if parse_game(&turns) {
+                result += game_id;
+            }
         }
     }
 
