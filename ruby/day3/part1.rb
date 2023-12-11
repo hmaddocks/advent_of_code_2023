@@ -30,8 +30,7 @@ def adjacent?(symbol_pos, number, width)
   return false if symbol_pos < number[1] - (width + 1) || symbol_pos > (number[2] + width + 1)
 
   [-(width + 1), -width, -(width - 1), -1, 1, width - 1, width, width + 1].any? do |position|
-    pos = symbol_pos + position
-    pos >= number[1] && pos <= number[2]
+    (number[1]..number[2]).include?(symbol_pos + position)
   end
 end
 

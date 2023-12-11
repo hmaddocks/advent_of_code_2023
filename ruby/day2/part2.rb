@@ -23,14 +23,11 @@ def parse_game(game)
 end
 
 def part2(input)
-  result = 0
-  input.split("\n") do |line|
+  input.split("\n").reduce(0) do |result, line|
     game = line.match(/Game \d+: (.*)/).captures.first
     turns = parse_line(game)
-    result += parse_game(turns)
+    result + parse_game(turns)
   end
-
-  result
 end
 
 if __FILE__ == $PROGRAM_NAME
