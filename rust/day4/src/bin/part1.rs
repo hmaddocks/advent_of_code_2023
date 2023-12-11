@@ -1,25 +1,36 @@
-use std::collections::HashSet;
+fn process_game(line: &str) -> Vec<u32> {
+    let (_game_id, game) = line.split_once(":").unwrap();
+    let (winning, mine) = game.split_once("|").unwrap();
+
+    let winning = parse_numbers(winning);
+    let mine = parse_numbers(mine);
+
+    mine.into_iter()
+        .filter(|n| winning.contains(n))
+        .collect::<Vec<u32>>()
+}
+
+fn parse_numbers(numbers: &str) -> Vec<u32> {
+    numbers
+        .split_whitespace()
+        .map(|n| n.parse::<u32>().unwrap())
+        .collect()
+}
+
+fn win_count(wins: &Vec<u32>) -> Option<u32> {
+    if wins.is_empty() {
+        None
+    } else {
+        Some(wins.len() as u32)
+    }
+}
 
 fn part1(input: &str) -> u32 {
     input
         .trim()
         .split("\n")
-        .map(|line| line.split(":").collect::<Vec<&str>>()[1])
-        .filter_map(|game| {
-            let pair: Vec<&str> = game.split("|").collect();
-
-            let first = pair[0].split_whitespace().collect::<Vec<&str>>();
-            let second = pair[1].split_whitespace().collect::<Vec<&str>>();
-
-            let l: HashSet<&str> = HashSet::from_iter(first.iter().cloned());
-            let r: HashSet<&str> = HashSet::from_iter(second.iter().cloned());
-            let i: HashSet<&str> = l.intersection(&r).cloned().collect();
-            if i.len() != 0 {
-                Some(i.len() as u32)
-            } else {
-                None
-            }
-        })
+        .map(|line| process_game(line))
+        .filter_map(|i| win_count(&i))
         .map(|c| (2 as u32).pow(c - 1))
         .sum()
 }
