@@ -4,30 +4,26 @@ struct Game {
     count: usize,
 }
 
-fn parse(game: &str) -> Vec<&str> {
-    game.split("|").collect()
+fn parse_numbers(numbers: &str) -> Vec<u32> {
+    numbers
+        .split_whitespace()
+        .map(|n| n.parse::<u32>().unwrap())
+        .collect()
+}
+
+fn process_game(line: &str) -> Game {
+    let (_game_id, game) = line.split_once(":").unwrap();
+    let (winning, mine) = game.split_once("|").unwrap();
+
+    let winning = parse_numbers(winning);
+    let mine = parse_numbers(mine);
+
+    let wins = mine.into_iter().filter(|n| winning.contains(n)).count();
+    Game { wins, count: 1 }
 }
 
 fn part2(input: &str) -> usize {
-    let lines: Vec<&str> = input.lines().collect();
-
-    let mut games: Vec<Game> = lines
-        .iter()
-        .map(|line| line.split(":").last().unwrap_or(""))
-        .map(|game| parse(game))
-        .map(|game| {
-            let left: Vec<usize> = game[0]
-                .split_whitespace()
-                .map(|x| x.parse().unwrap_or(0))
-                .collect();
-            let right: Vec<usize> = game[1]
-                .split_whitespace()
-                .map(|x| x.parse().unwrap_or(0))
-                .collect();
-            let wins: usize = left.iter().filter(|x| right.contains(x)).count();
-            Game { wins, count: 1 }
-        })
-        .collect();
+    let mut games: Vec<Game> = input.lines().map(|line| process_game(line)).collect();
 
     for i in 0..games.len() {
         let game = games[i].clone();

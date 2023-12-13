@@ -27,8 +27,7 @@ fn win_count(wins: &Vec<u32>) -> Option<u32> {
 
 fn part1(input: &str) -> u32 {
     input
-        .trim()
-        .split("\n")
+        .lines()
         .map(|line| process_game(line))
         .filter_map(|i| win_count(&i))
         .map(|c| (2 as u32).pow(c - 1))
