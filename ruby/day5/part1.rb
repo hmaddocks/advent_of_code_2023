@@ -34,7 +34,7 @@ def part1(input)
   range_maps = maps.map do |map_string|
     map_string.split(":")
               .last
-              .split("\n")
+              .split("\n")[1..]
               .map { |map| create_range_map(map) }
               .reduce({}, :merge)
   end
