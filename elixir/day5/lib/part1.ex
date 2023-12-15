@@ -77,3 +77,7 @@ defmodule Part1 do
     |> elem(1)
   end
 end
+
+File.read!("input.txt")
+|> Part1.part1()
+|> IO.inspect(label: "part1")

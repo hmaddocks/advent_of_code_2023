@@ -15,24 +15,16 @@ defmodule Part2 do
   end
 
   def map_value(range_map, value) do
-    # If no matching range found, return value
     looked_up =
       range_map
       |> Enum.find_value(fn {source_range, dest_range} ->
-        # Look for first matching range
         if value in source_range do
-          # Calculate offset from source range
           value_offset = value - source_range.first()
           dest_range.first() + value_offset
         end
       end)
 
-    cond do
-      # If no matching range found, return value
-      is_nil(looked_up) -> value
-      # Otherwise return looked up value
-      true -> looked_up
-    end
+    if is_nil(looked_up), do: value, else: looked_up
   end
 
   def maps_lookup(range_maps, value) do
@@ -40,6 +32,14 @@ defmodule Part2 do
     |> Enum.reduce(value, fn range_map, acc ->
       map_value(range_map, acc)
     end)
+  end
+
+  def check_in_seed_range(seed_ranges, mapped) do
+    Enum.any?(seed_ranges, &in_seed_range?(&1, mapped))
+  end
+
+  defp in_seed_range?(seed_range, mapped) do
+    mapped in seed_range
   end
 
   def part2(input) do
@@ -55,7 +55,6 @@ defmodule Part2 do
       |> Enum.map(&String.to_integer/1)
       |> Enum.chunk_every(2, 2)
       |> Enum.map(fn [start, length] -> Range.new(start, start + length - 1) end)
-      |> IO.inspect(label: "seed_ranges")
 
     reverse_range_maps =
       maps
@@ -66,14 +65,12 @@ defmodule Part2 do
         |> String.split("\n", trim: true)
         |> Enum.map(&create_range_map/1)
         |> Enum.reduce(%{}, &Map.merge/2)
-        # Reverse the map
         |> Enum.map(fn {source_range, dest_range} ->
           {dest_range, source_range}
         end)
       end)
       |> Enum.reverse()
 
-    # Based on the first map, find min and max values to use as bounds
     first_map = Enum.at(reverse_range_maps, 0)
 
     max_loc =
@@ -101,7 +98,7 @@ defmodule Part2 do
           {loc, mapped}
         end)
         |> Stream.filter(fn {loc, mapped} ->
-          Enum.any?(seed_ranges, fn seed_range -> mapped in seed_range end)
+          check_in_seed_range(seed_ranges, mapped)
         end)
         |> Stream.take(1)
         |> Enum.to_list()
@@ -116,3 +113,7 @@ defmodule Part2 do
     |> elem(0)
   end
 end
+
+File.read!("input.txt")
+|> Part1.part1()
+|> IO.inspect(label: "part1")

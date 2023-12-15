@@ -38,6 +38,6 @@ defmodule Part2Test do
     56 93 4
     """
 
-    assert Part2.part2(input) == 13
+    assert Part2.part2(input) == 46
   end
 end
