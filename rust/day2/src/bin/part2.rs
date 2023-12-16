@@ -5,15 +5,17 @@ fn parse_line(line: &str) -> Vec<HashMap<&str, u32>> {
     line.split(';')
         .map(|game| {
             game.split(',')
-                .map(|bag| {
-                    let mut iter = bag.trim().split_whitespace();
-                    let count = iter.next().unwrap().parse().unwrap();
-                    let colour = iter.next().unwrap();
-                    (colour, count)
-                })
+                .map(|bag| unwrap_bag(bag))
                 .collect::<HashMap<&str, u32>>()
         })
         .collect()
+}
+
+fn unwrap_bag(bag: &str) -> (&str, u32) {
+    let mut iter = bag.trim().split_whitespace();
+    let count = iter.next().unwrap().parse().unwrap();
+    let colour = iter.last().unwrap();
+    (colour, count)
 }
 
 fn parse_game(game: &[HashMap<&str, u32>]) -> u32 {

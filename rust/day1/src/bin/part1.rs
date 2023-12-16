@@ -1,12 +1,11 @@
-fn find_digit(input: &str) -> Option<u32> {
-    input.chars().filter_map(|c| c.to_digit(10)).next()
+fn find_digit(input: &str) -> Vec<u32> {
+    input.chars().filter_map(|c| c.to_digit(10)).collect()
 }
 
 fn process_line(line: &str) -> u32 {
-    let first = find_digit(line).unwrap_or(0);
-    let reversed_line = line.chars().rev().collect::<String>();
-    let last = find_digit(&reversed_line).unwrap_or(0);
-
+    let digits = find_digit(line);
+    let first = digits.first().unwrap();
+    let last = digits.last().unwrap();
     first * 10 + last
 }
 
@@ -16,8 +15,7 @@ fn part1(input: &str) -> u32 {
 
 fn main() {
     let input = include_str!("../../input.txt");
-    let output = part1(input);
-    dbg!(output);
+    dbg!(part1(input));
 }
 
 #[cfg(test)]
@@ -26,8 +24,8 @@ mod tests {
 
     #[test]
     fn test_find_digit() {
-        assert_eq!(find_digit("abc123"), Some(1));
-        assert_eq!(find_digit("789xyz"), Some(7));
+        assert_eq!(find_digit("abc123"), vec!(1, 2, 3));
+        assert_eq!(find_digit("789xyz"), vec!(7, 8, 9));
     }
 
     #[test]

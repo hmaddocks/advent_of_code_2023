@@ -67,8 +67,7 @@ fn part2(input: &str) -> u32 {
 
 fn main() {
     let input = include_str!("../../input.txt");
-    let output = part2(input);
-    dbg!(output);
+    dbg!(part2(input));
 }
 
 #[cfg(test)]

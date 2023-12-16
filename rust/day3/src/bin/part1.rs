@@ -4,14 +4,16 @@ fn find_symbols(input: &str) -> Vec<i32> {
     input
         .chars()
         .enumerate()
-        .filter_map(|(i, c)| {
-            if c != '.' && !c.is_digit(10) {
-                Some(i as i32)
-            } else {
-                None
-            }
-        })
+        .filter_map(|(i, c)| char_is_symbol(c, i))
         .collect()
+}
+
+fn char_is_symbol(c: char, i: usize) -> Option<i32> {
+    if c != '.' && !c.is_digit(10) {
+        Some(i as i32)
+    } else {
+        None
+    }
 }
 
 fn find_numbers(input: &str) -> Vec<(&str, i32, i32)> {
@@ -53,16 +55,20 @@ fn part1(input: &str) -> i32 {
     symbols
         .iter()
         .flat_map(|symbol| {
-            numbers.iter().filter_map(|number| {
-                if adjacent(*symbol, *number, width) {
-                    let n = number.0.parse::<i32>().unwrap();
-                    Some(n)
-                } else {
-                    None
-                }
-            })
+            numbers
+                .iter()
+                .filter_map(|number| find_digit(symbol, number, width))
         })
         .sum()
+}
+
+fn find_digit(symbol: &i32, number: &(&str, i32, i32), width: i32) -> Option<i32> {
+    if adjacent(*symbol, *number, width) {
+        let n = number.0.parse::<i32>().unwrap();
+        Some(n)
+    } else {
+        None
+    }
 }
 
 fn main() {
