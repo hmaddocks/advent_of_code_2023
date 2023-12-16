@@ -29,23 +29,28 @@ defmodule Part1 do
     end)
   end
 
+  def parse_game_id(game_id) do
+    case Integer.parse(game_id) do
+      {i, _} -> i
+      _ -> 0
+    end
+  end
+
+  def process_line(line, acc) do
+    [_, game_id, game] = Regex.run(~r/Game (\d+): (.*)/, line)
+    turns = parse_line(game)
+
+    if parse_game(turns) do
+      acc + parse_game_id(game_id)
+    else
+      acc
+    end
+  end
+
   def part1(input) do
     input
     |> String.split("\n", trim: true)
-    |> Enum.reduce(0, fn line, acc ->
-      [_, game_id, game] = Regex.run(~r/Game (\d+): (.*)/, line)
-      turns = parse_line(game)
-
-      if parse_game(turns) do
-        acc +
-          case Integer.parse(game_id) do
-            {i, _} -> i
-            _ -> 0
-          end
-      else
-        acc
-      end
-    end)
+    |> Enum.reduce(0, &process_line/2)
   end
 end
 
