@@ -29,24 +29,27 @@ defmodule Part1Test do
   end
 
   test "adjacent returns true when symbol is adjacent to the number" do
-    number = {"633", 26, 28}
+    left = 26
+    right = 28
     width = 10
     symbol = 36
-    assert Part1.adjacent?(symbol, number, width) == true
+    assert Part1.adjacent?(symbol, left, right, width) == true
   end
 
   test "adjacent returns false when symbol is not adjacent to the number" do
-    number = {"58", 57, 58}
+    left = 57
+    right = 58
     width = 10
     symbol = 55
-    assert Part1.adjacent?(symbol, number, width) == false
+    assert Part1.adjacent?(symbol, left, right, width) == false
   end
 
   test "adjacent returns false when symbol is not near to the number" do
-    number = {"633", 26, 28}
+    left = 26
+    right = 28
     width = 10
     symbol = 13
-    assert Part1.adjacent?(symbol, number, width) == false
+    assert Part1.adjacent?(symbol, left, right, width) == false
   end
 
   test "greets the world" do

@@ -11,14 +11,22 @@ defmodule Part2 do
     end)
   end
 
-  def adjacent?(star_pos, number, width) do
-    # return false if star_pos < number[1] - (width + 1) || star_pos > (number[2] + width + 1)
+  def adjacent?(symbol_pos, left, _, width)
+      when symbol_pos < left - (width + 1) do
+    false
+  end
 
+  def adjacent?(symbol_pos, _, right, width)
+      when symbol_pos > right + width + 1 do
+    false
+  end
+
+  def adjacent?(symbol_pos, left, right, width) do
     Enum.any?(
       [-(width + 1), -width, -(width - 1), -1, 1, width - 1, width, width + 1],
       fn position ->
-        pos = star_pos + position
-        pos >= elem(number, 1) && pos <= elem(number, 2)
+        pos = symbol_pos + position
+        pos >= left && pos <= right
       end
     )
   end
@@ -51,7 +59,9 @@ defmodule Part2 do
     stars
     |> Enum.map(fn star ->
       Enum.filter(numbers, fn number ->
-        adjacent?(star, number, width)
+        left = elem(number, 1)
+        right = elem(number, 2)
+        adjacent?(star, left, right, width)
       end)
     end)
     |> Enum.uniq()
