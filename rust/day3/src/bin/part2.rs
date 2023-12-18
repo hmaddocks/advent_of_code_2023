@@ -50,7 +50,7 @@ fn part2(input: &str) -> i32 {
             numbers
                 .iter()
                 .filter(|number| adjacent(*star, *number, width))
-                .cloned() // Clone the elements before collecting them
+                .cloned()
                 .collect()
         })
         .collect();

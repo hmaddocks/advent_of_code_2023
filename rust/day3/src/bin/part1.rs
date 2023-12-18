@@ -45,6 +45,15 @@ fn adjacent(symbol_pos: i32, number: (&str, i32, i32), width: i32) -> bool {
     })
 }
 
+fn find_digit(symbol: &i32, number: &(&str, i32, i32), width: i32) -> Option<i32> {
+    if adjacent(*symbol, *number, width) {
+        let n = number.0.parse::<i32>().unwrap();
+        Some(n)
+    } else {
+        None
+    }
+}
+
 fn part1(input: &str) -> i32 {
     let width = input.lines().next().unwrap().len() as i32;
     let new_input = input.replace("\n", "");
@@ -60,15 +69,6 @@ fn part1(input: &str) -> i32 {
                 .filter_map(|number| find_digit(symbol, number, width))
         })
         .sum()
-}
-
-fn find_digit(symbol: &i32, number: &(&str, i32, i32), width: i32) -> Option<i32> {
-    if adjacent(*symbol, *number, width) {
-        let n = number.0.parse::<i32>().unwrap();
-        Some(n)
-    } else {
-        None
-    }
 }
 
 fn main() {
