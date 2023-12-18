@@ -17,7 +17,7 @@ def find_word_or_digit(line)
     return number if line.start_with?(word)
   end
 
-  return line[0].to_i if line[0].match?(/\d/)
+  line[0].to_i if line[0].match?(/\d/)
 end
 
 def process_line(line)

@@ -19,6 +19,7 @@ def parse_game(game)
     max_blue = [turn[:blue], max_blue].max unless turn[:blue].nil?
     max_green = [turn[:green], max_green].max unless turn[:green].nil?
   end
+
   max_red * max_blue * max_green
 end
 
