@@ -83,22 +83,13 @@ fn part2(input: &str) -> usize {
         })
         .collect::<Vec<_>>();
 
-    cards.sort_unstable_by_key(|&(_, _, key, _)| key);
-
-    let p1: usize = cards
-        .iter()
-        .enumerate()
-        .map(|(i, (_, bid, _, _))| (i + 1) * bid)
-        .sum();
-
     cards.sort_unstable_by_key(|&(_, _, _, key)| key);
 
-    let p2 = cards
+    cards
         .iter()
         .enumerate()
         .map(|(i, (_, bid, _, _))| (i + 1) * bid)
-        .sum();
-    p2
+        .sum()
 }
 
 fn main() {
@@ -117,6 +108,6 @@ T55J5 684
 KK677 28
 KTJJT 220
 QQQJA 483";
-        assert_eq!(part2(input), 6440);
+        assert_eq!(part2(input), 5905);
     }
 }

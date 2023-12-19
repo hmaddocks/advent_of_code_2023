@@ -1,17 +1,11 @@
 use itertools::Itertools;
 
-fn card_index(c: char, p2: bool) -> usize {
+fn card_index(c: char) -> usize {
     match c {
         'A' => 14,
         'K' => 13,
         'Q' => 12,
-        'J' => {
-            if p2 {
-                0
-            } else {
-                11
-            }
-        }
+        'J' => 11,
         'T' => 10,
         '9' => 9,
         '8' => 8,
@@ -59,7 +53,7 @@ fn determine_hand_type(counts: &[usize], jokers: usize) -> usize {
     }
 }
 
-fn hand_strength(cards: &str, p2: bool) -> (usize, usize) {
+fn calculate_hand_strength(cards: &str, p2: bool) -> (usize, usize) {
     let counts_by_card = cards.chars().counts();
     let counts = counts_by_card
         .iter()
@@ -73,33 +67,30 @@ fn hand_strength(cards: &str, p2: bool) -> (usize, usize) {
         0
     };
 
-    let idx = cards
-        .chars()
-        .fold(0, |acc, c| (acc << 4) + card_index(c, p2));
+    let idx = cards.chars().fold(0, |acc, c| (acc << 4) + card_index(c));
 
     (determine_hand_type(&counts, jokers), idx)
 }
 
 fn part1(input: &str) -> usize {
     let mut cards = input
+        .trim()
         .split('\n')
-        .map(|l| {
-            let (cards, bid) = l.split_once(' ').unwrap();
-            let p1key = hand_strength(cards, false);
-            let p2key = hand_strength(cards, true);
+        .map(|line| {
+            let (cards, bid) = line.split_once(' ').unwrap();
+            let p1key = calculate_hand_strength(cards, false);
+            let p2key = calculate_hand_strength(cards, true);
             (cards, bid.parse().unwrap(), p1key, p2key)
         })
         .collect::<Vec<_>>();
 
     cards.sort_unstable_by_key(|&(_, _, key, _)| key);
 
-    let p1 = cards
+    cards
         .iter()
         .enumerate()
         .map(|(i, (_, bid, _, _))| (i + 1) * bid)
-        .sum();
-
-    p1
+        .sum()
 }
 
 fn main() {
