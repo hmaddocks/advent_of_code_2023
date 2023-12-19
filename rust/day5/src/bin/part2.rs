@@ -61,20 +61,32 @@ fn find_ranges(l: &str) -> (usize, usize, usize) {
 }
 
 fn p2(seeds: Vec<usize>, layers: &[Vec<(usize, usize, usize)>]) -> usize {
-    let seeds = seeds
-        .into_iter()
-        .tuples()
-        .map(|(a, len)| (a, a + len))
-        .collect::<Vec<_>>();
+    let seeds = make_seeds(seeds);
 
+    let locations = make_locations(layers, seeds);
+
+    locations.iter().map(|r| r.0).min().unwrap()
+}
+
+fn make_locations(
+    layers: &[Vec<(usize, usize, usize)>],
+    seeds: Vec<(usize, usize)>,
+) -> Vec<(usize, usize)> {
     let locations = layers.iter().fold(seeds, |seeds, mappings| {
         seeds
             .iter()
             .flat_map(|&(start, end)| fun_name3(start, end, mappings))
             .collect()
     });
+    locations
+}
 
-    locations.iter().map(|r| r.0).min().unwrap()
+fn make_seeds(seeds: Vec<usize>) -> Vec<(usize, usize)> {
+    seeds
+        .into_iter()
+        .tuples()
+        .map(|(a, len)| (a, a + len))
+        .collect::<Vec<_>>()
 }
 
 fn part2(input: &str) -> usize {

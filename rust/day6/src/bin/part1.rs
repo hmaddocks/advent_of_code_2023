@@ -22,7 +22,7 @@ fn part1(input: &str) -> f64 {
     let lines: Vec<Vec<f64>> = input
         .lines()
         .map(|line| line.trim().split_once(":").unwrap())
-        .map(|(_, distance)| fun_name(distance))
+        .map(|(_, distance)| parse_distance(distance))
         .collect();
 
     let data = transpose(lines);
@@ -35,7 +35,7 @@ fn part1(input: &str) -> f64 {
     data.iter().fold(1f64, |acc, f| acc * f)
 }
 
-fn fun_name(distance: &str) -> Vec<f64> {
+fn parse_distance(distance: &str) -> Vec<f64> {
     distance
         .split_whitespace()
         .map(|x| x.parse::<f64>().unwrap())
