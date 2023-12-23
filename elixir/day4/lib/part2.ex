@@ -1,48 +1,54 @@
+defmodule Game do
+  defstruct wins: 0, count: 1
+end
+
 defmodule Part2 do
-  defp to_map(lines) do
-    # Turn the list of lines into a map keyed by game id.
-    # Each value is a tuple containing the list and how many times to process it
-    Enum.reduce(lines, %{}, fn line, acc ->
-      [label, numbers] = String.split(line, ":")
-      [_, card_id] = String.split(label)
-      Map.put_new(acc, String.to_integer(card_id), {1, numbers})
+  def parse_numbers(numbers) do
+    String.split(numbers)
+    |> Enum.map(&String.to_integer/1)
+  end
+
+  def build_games_list(line) do
+    [_game_id, game] = String.split(line, ":", parts: 2)
+    [winning, mine] = String.split(game, "|") |> Enum.map(&parse_numbers/1)
+
+    wins = Enum.count(mine, &Enum.member?(winning, &1))
+    %Game{wins: wins}
+  end
+
+  def update_game_count(games, _, _, nil) do
+    games
+  end
+
+  def update_game_count(games, j, %Game{wins: game_wins, count: game_count}, %Game{
+        wins: _,
+        count: game_j_count
+      }) do
+    List.replace_at(games, j, %Game{wins: game_wins, count: game_count + game_j_count})
+  end
+
+  def calculate_total_count(games) do
+    Enum.with_index(games, fn game, i ->
+      Enum.reduce((i + 1)..(i + game.wins), games, fn j, acc ->
+        update_game_count(acc, j, game, Enum.at(acc, j))
+        |> IO.inspect(label: "games")
+      end)
     end)
   end
 
-  defp count_cards(_, cards, total) when map_size(cards) == 0 do
-    total
-  end
-
-  defp count_cards(i, cards, total) do
-    {count, card} = Map.get(cards, i)
-
-    updated_cards =
-      case count_matches(card) do
-        0 ->
-          # No matches, so no cards to add
-          cards
-
-        match_count ->
-          # Add to the card count for the next match_count cards coming up
-          # Increment by the count of the current cards.
-          (i + 1)..(i + match_count)
-          |> Enum.reduce(cards, fn card_id, acc -> increment_card_count(acc, card_id, count) end)
-      end
-
-    count_cards(i + 1, Map.delete(updated_cards, i), total + count)
-  end
-
-  defp increment_card_count(cards, card_id, inc) do
-    Map.update!(cards, card_id, fn {count, numbers} -> {count + inc, numbers} end)
-  end
-
   def part2(input) do
-    input
-    |> String.split("\n", trim: true)
-    |> Enum.map(&process_game/1)
-    |> Enum.filter(&Enum.any?/1)
-    |> Enum.map(&Enum.count/1)
-    |> to_map()
+    games =
+      input
+      |> String.split("\n", trim: true)
+      |> Enum.map(&build_games_list/1)
+
+    games = calculate_total_count(games)
+
+    # games
+    # |> Enum.map(fn game ->
+    #   game.count
+    # end)
+    # |> Enum.sum()
   end
 end
 
